@@ -1,15 +1,41 @@
-## Put comments here that give an overall description of what your
-## functions do
 
-## Write a short comment describing this function
-
+## This function defines functions for program operation
+##nrows, ncols problem
 makeCacheMatrix <- function(x = matrix()) {
-
+        set <- function(y){
+                x <<- y
+                i <<- NULL
+        }
+        get <- function() x      
+        ## These functions store value, they don't calculate it
+        setinverse <- function(inverse) i <<- inverse
+        getinverse <- function() i
+        list(set = set, get = get,
+             setinverse = setinverse,
+             getinverse = getinverse)
 }
 
 
-## Write a short comment describing this function
+## This function calculates inverse of a matrix and sets a new value to global 'i'
 
-cacheSolve <- function(x, ...) {
+cacheSolve <- function(x, ...){
+        i <- x["getinverse()"]
+        ##Check if i already has a value
+        if(!is.null(i)){
+                message("getting cached data")
+                return(i)
+        }
+        ## Inverse the matrix 'x' and set a new value to global 'i'
+        else{
+                data <- x["get()"]
+                i <- solve(data, ...)
+                x["setinverse(i)"]
+                i
+        }
         ## Return a matrix that is the inverse of 'x'
 }
+B<-matrix(c(1,2,3,4,5,6,7,8,9), nrow=3)
+x<-makeCacheMatrix(B)
+cacheSolve(x)
+
+##I didn't get this to work, don't know what to do
